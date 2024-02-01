@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquisa de Squad</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Adicione o link para a biblioteca Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        input {
+            width: calc(100% - 16px);
+            padding: 10px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .details-section {
+            margin-top: 20px;
+        }
+
+        .details-table {
+            width: 100%;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Pesquisa de Squad</h2>
+
+    <form th:action="@{/squad/pesquisar}" method="post">
+        <input placeholder="Nome da Squad" type="text" id="nomeSquad" name="nomeSquad" required>
+        <button type="submit" class="btn btn-primary">Pesquisar</button>
+    </form>
+
+    <hr>
+
+    <h2>Squad</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="squad : ${squadsEncontradas}">
+                <td th:text="${squad.idSquad}"></td>
+                <td th:text="${squad.nomeSquad}"></td>
+                <td th:text="${squad.descricaoSquad}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:each="squad : ${squadsEncontradas}" th:id="'details-' + ${squad.idSquad}" class="details-section">
+        <hr>
+        <h2>Membros </h2>
+        <table class="table table-bordered table-striped details-table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nome do Colaborador</th>
+                <th>Cargo</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="colaborador : ${squad.getColaboradorSquadList()}">
+                <td th:text="${colaborador.getColaborador().idColaborador}"></td>
+                <td th:text="${colaborador.getColaborador().nome}"></td>
+                <td th:text="${colaborador.getColaborador().cargo}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
